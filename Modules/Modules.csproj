@@ -16,9 +16,6 @@
     <Folder Include="Cart\Domain\" />
     <Folder Include="Cart\Infrastructure\" />
     <Folder Include="Catalog\API\" />
-    <Folder Include="Catalog\Application\" />
-    <Folder Include="Catalog\Domain\" />
-    <Folder Include="Catalog\Infrastructure\" />
     <Folder Include="Customers\API\" />
     <Folder Include="Customers\Application\" />
     <Folder Include="Customers\Domain\" />
@@ -43,6 +40,11 @@
     <Folder Include="Reviews\Application\" />
     <Folder Include="Reviews\Domain\" />
     <Folder Include="Reviews\Infrastructure\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EntityFramework" Version="6.5.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.8" />
   </ItemGroup>
 
 </Project>
