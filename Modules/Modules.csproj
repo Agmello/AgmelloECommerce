@@ -1,0 +1,48 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Admin\API\" />
+    <Folder Include="Admin\Application\" />
+    <Folder Include="Admin\Domain\" />
+    <Folder Include="Admin\Infrastructure\" />
+    <Folder Include="Cart\API\" />
+    <Folder Include="Cart\Application\" />
+    <Folder Include="Cart\Domain\" />
+    <Folder Include="Cart\Infrastructure\" />
+    <Folder Include="Catalog\API\" />
+    <Folder Include="Catalog\Application\" />
+    <Folder Include="Catalog\Domain\" />
+    <Folder Include="Catalog\Infrastructure\" />
+    <Folder Include="Customers\API\" />
+    <Folder Include="Customers\Application\" />
+    <Folder Include="Customers\Domain\" />
+    <Folder Include="Customers\Infrastructure\" />
+    <Folder Include="Discounts\API\" />
+    <Folder Include="Discounts\Application\" />
+    <Folder Include="Discounts\Domain\" />
+    <Folder Include="Discounts\Infrastructure\" />
+    <Folder Include="Inventory\API\" />
+    <Folder Include="Inventory\Application\" />
+    <Folder Include="Inventory\Domain\" />
+    <Folder Include="Inventory\Infrastructure\" />
+    <Folder Include="Orders\API\" />
+    <Folder Include="Orders\Application\" />
+    <Folder Include="Orders\Infrastructure\" />
+    <Folder Include="Payments\API\" />
+    <Folder Include="Payments\Application\" />
+    <Folder Include="Payments\Domain\" />
+    <Folder Include="Payments\Infrastructure\" />
+    <Folder Include="Orders\Domain\" />
+    <Folder Include="Reviews\API\" />
+    <Folder Include="Reviews\Application\" />
+    <Folder Include="Reviews\Domain\" />
+    <Folder Include="Reviews\Infrastructure\" />
+  </ItemGroup>
+
+</Project>
