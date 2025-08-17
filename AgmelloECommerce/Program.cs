@@ -1,3 +1,4 @@
+using Modules;
 
 namespace AgmelloECommerce
 {
@@ -14,6 +15,9 @@ namespace AgmelloECommerce
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddControllers();
+            ModulesDI.RegisterServices(builder.Services, builder.Configuration);
+            
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -46,6 +50,8 @@ namespace AgmelloECommerce
             })
             .WithName("GetWeatherForecast")
             .WithOpenApi();
+
+            app.MapControllers();
 
             app.Run();
         }

@@ -1,7 +1,7 @@
 ﻿using Modules.Catalog.Domain;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +11,12 @@ namespace Modules.Catalog.Infrastructure
     internal class CatalogRepository : ICatalogRepository
     {
         CatalogDbContext m_dbContext;
+
+        public CatalogRepository(CatalogDbContext dbContext)
+        {
+            m_dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+        }
+
         public async Task AddItemAsyc(CatalogItem item, CancellationToken token = default)
         {
             m_dbContext.CatalogItems.Add(item);

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Modules.Catalog.Domain.CatalogItem;
 
 namespace Modules.Catalog.Application
 {
@@ -18,7 +19,7 @@ namespace Modules.Catalog.Application
             m_repository = catalogRepository ?? throw new ArgumentNullException(nameof(catalogRepository));
         }
 
-        public async Task<Guid> HandleAsync(string name, decimal price, string description="", string availability = "Coming soon", string imageUrl = "", IEnumerable<string>? categories = null, IEnumerable<string>? tags = null)
+        public async Task<Guid> HandleAsync(string name, decimal price, string description="", string availability = "Coming soon", string imageUrl = "", IEnumerable<Category>? categories = null, IEnumerable<Tag>? tags = null)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException("Name cannot be empty.", nameof(name));
