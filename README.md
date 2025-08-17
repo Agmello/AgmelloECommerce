@@ -8,3 +8,5 @@ Development order:
         - [ ] Application
         - [ ] Infrastructure
         - [ ] API
+         
+Planned to set up project management with Notion: https://www.notion.so/25299cf1b9c28075958ac21bb82f820e?source=copy_link
