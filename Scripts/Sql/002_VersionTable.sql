@@ -1,4 +1,5 @@
 ﻿SET NOCOUNT ON;
+USE AgmelloECommerce;
 
 DECLARE @TargetVersion int = 1;
 DECLARE @CurrentVersion int;

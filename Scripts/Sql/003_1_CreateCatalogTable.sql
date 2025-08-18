@@ -1,20 +1,24 @@
 ﻿/* ---------- Module: <YourModuleName> ---------- */
+USE AgmelloECommerce;  -- Ensure the correct database context
 /* Version target for this script */
 DECLARE @ModuleName sysname = N'Catalog';  -- e.g., 'Catalog'
 DECLARE @TargetVersion int = 1;
 DECLARE @CurrentVersion int;
 
+
 SET NOCOUNT ON;
 SET XACT_ABORT ON;
 
+DECLARE @LockName NVARCHAR(128) = N'schema_migration_' + @ModuleName;
+
+BEGIN TRAN;
 /* Optional: serialize concurrent runs to avoid races */
 EXEC sp_getapplock 
-     @Resource = 'schema_migration_' + @ModuleName, 
+     @Resource = @LockName, 
      @LockMode = 'Exclusive',
      @LockTimeout = 60000;  -- 60s
 
 BEGIN TRY
-    BEGIN TRAN;
 
     /* Ensure a row exists for this module */
     SELECT @CurrentVersion = v.VersionNumber
@@ -72,4 +76,4 @@ BEGIN CATCH
     RAISERROR(N'[%s] migration failed: %s', 16, 1, @ModuleName, @msg);
 END CATCH;
 
-EXEC sp_releaseapplock @Resource = 'schema_migration_' + @ModuleName;
+EXEC sp_releaseapplock @Resource = @LockName;
