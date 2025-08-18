@@ -23,6 +23,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Templates", "Templates", "{
 		ModuleTemplate.sql = ModuleTemplate.sql
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Installations", "Installations", "{D0A65AD1-CBDD-4B55-A841-EBA243F0B097}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,6 +50,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{AC5CED84-2E2B-41A1-80C7-D640FB1361F1} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{93C64475-CDE0-4D49-AC30-46F4AC7462E3} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{D0A65AD1-CBDD-4B55-A841-EBA243F0B097} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {171D0713-8621-4B5E-83DA-1ACE58DB00AE}
