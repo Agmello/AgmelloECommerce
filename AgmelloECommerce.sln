@@ -4,10 +4,18 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.13.35931.197
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgmelloECommerce", "AgmelloECommerce\AgmelloECommerce.csproj", "{E414ABD3-EA07-4E3F-9FBA-E3DCDAF7446A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{83B12154-1B5C-4C55-BE89-CD919AE07832} = {83B12154-1B5C-4C55-BE89-CD919AE07832}
+		{CF4F79A1-CC76-4C2F-A22D-5CBE78A6EAEE} = {CF4F79A1-CC76-4C2F-A22D-5CBE78A6EAEE}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{CF4F79A1-CC76-4C2F-A22D-5CBE78A6EAEE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Modules", "Modules\Modules.csproj", "{83B12154-1B5C-4C55-BE89-CD919AE07832}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sql", "Sql", "{98FD5A57-7C13-4C03-AA12-13D0E0D08F57}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,6 +38,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{98FD5A57-7C13-4C03-AA12-13D0E0D08F57} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {171D0713-8621-4B5E-83DA-1ACE58DB00AE}
