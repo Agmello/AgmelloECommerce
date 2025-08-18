@@ -21,21 +21,20 @@ namespace Modules.Catalog.Infrastructure
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.HasDefaultSchema("CatalogItems");
-            modelBuilder.Entity<Domain.CatalogItem>().ToTable("Item", "CatalogItems");
-            modelBuilder.Entity<Category>().ToTable("Category", "CatalogItems");
-            modelBuilder.Entity<Tag>().ToTable("Tag", "CatalogItems");
+            modelBuilder.Entity<Domain.CatalogItem>().ToTable("catalog");
+            modelBuilder.Entity<Category>().ToTable("Category");
+            modelBuilder.Entity<Tag>().ToTable("Tag");
 
             // EF Core 5+ supports many-to-many without explicit join entity
             modelBuilder.Entity<CatalogItem>()
                 .HasMany(i => i.Categories)
                 .WithMany(c => c.Items)
-                .UsingEntity(j => j.ToTable("ItemCategories", "CatalogItems"));
+                .UsingEntity(j => j.ToTable("ItemCategories"));
 
             modelBuilder.Entity<CatalogItem>()
                 .HasMany(i => i.Tags)
                 .WithMany(t => t.Items)
-                .UsingEntity(j => j.ToTable("ItemTags", "CatalogItems"));
+                .UsingEntity(j => j.ToTable("ItemTags"));
         }
     }
 }

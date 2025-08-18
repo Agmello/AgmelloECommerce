@@ -44,6 +44,50 @@ BEGIN TRY
                 ImageUrl     NVARCHAR(500)  NULL
             );
             CREATE INDEX IX_Catalog_Name ON dbo.Catalog(Name);
+            -- Add many-to-many relationships
+            CREATE TABLE dbo.Category
+            (
+                Id           INT IDENTITY(1,1) CONSTRAINT PK_Category PRIMARY KEY,
+                Name         NVARCHAR(100) NOT NULL,
+                CreatedAtUtc DATETIME2(0)  NOT NULL CONSTRAINT DF_Category_CreatedAtUtc DEFAULT SYSUTCDATETIME()
+            );
+            -- prevent duplicate names (uses DB collation; add explicit CI collation if needed)
+            CREATE UNIQUE INDEX UX_Category_Name ON dbo.Category(Name);
+
+            CREATE TABLE dbo.Tag
+            (
+                Id           INT IDENTITY(1,1) CONSTRAINT PK_Tag PRIMARY KEY,
+                Name         NVARCHAR(100) NOT NULL,
+                CreatedAtUtc DATETIME2(0)  NOT NULL CONSTRAINT DF_Tag_CreatedAtUtc DEFAULT SYSUTCDATETIME()
+            );
+            CREATE UNIQUE INDEX UX_Tag_Name ON dbo.Tag(Name);
+
+            CREATE TABLE dbo.CatalogCategories
+            (
+                CatalogId  INT NOT NULL,
+                CategoryId INT NOT NULL,
+                CONSTRAINT PK_CatalogCategories PRIMARY KEY (CatalogId, CategoryId),
+                CONSTRAINT FK_CatalogCategories_Catalog
+                    FOREIGN KEY (CatalogId)  REFERENCES dbo.Catalog(Id)  ON DELETE CASCADE,
+                CONSTRAINT FK_CatalogCategories_Category
+                    FOREIGN KEY (CategoryId) REFERENCES dbo.Category(Id) ON DELETE CASCADE
+            );
+            -- accelerates "items by category"
+            CREATE INDEX IX_CatalogCategories_CategoryId ON dbo.CatalogCategories(CategoryId, CatalogId);
+
+            CREATE TABLE dbo.CatalogTags
+            (
+                CatalogId INT NOT NULL,
+                TagId     INT NOT NULL,
+                CONSTRAINT PK_CatalogTags PRIMARY KEY (CatalogId, TagId),
+                CONSTRAINT FK_CatalogTags_Catalog
+                    FOREIGN KEY (CatalogId) REFERENCES dbo.Catalog(Id) ON DELETE CASCADE,
+                CONSTRAINT FK_CatalogTags_Tag
+                    FOREIGN KEY (TagId)     REFERENCES dbo.Tag(Id)     ON DELETE CASCADE
+            );
+            -- accelerates "items by tag"
+            CREATE INDEX IX_CatalogTags_TagId ON dbo.CatalogTags(TagId, CatalogId);
+
         END
         /* Insert version row */
         INSERT INTO dbo.VersionTable (TableName, VersionNumber)

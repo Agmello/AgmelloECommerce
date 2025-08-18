@@ -61,7 +61,7 @@ namespace Modules.Catalog.Domain
             }
         }
 
-        [Table("Category", Schema = "CatalogItems")]
+        [Table("Category")]
         public class Category
         {
             public Guid Id { get; set; } = Guid.NewGuid();
@@ -70,7 +70,7 @@ namespace Modules.Catalog.Domain
             public List<CatalogItem> Items { get; set; } = new();
         }
 
-        [Table("Tag", Schema = "CatalogItems")]
+        [Table("Tag")]
         public class Tag
         {
             public Guid Id { get; set; } = Guid.NewGuid();
