@@ -17,14 +17,17 @@ namespace Modules.Catalog.API
             m_mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
 
-
-
-
         [HttpDelete("purge")]
         public async Task<IActionResult> PurgeAsync(CancellationToken token = default)
         {
             var count = await m_mediator.Send(new PurgeCatalogItemTableCommand(), token);
             return Ok(new { deleted = count });
+        }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAsync(Guid id, CancellationToken token = default)
+        {
+            var deleted = await m_mediator.Send(new DeleteCatalogItemCommand(id), token);
+            return Ok(new { deleted });
         }
 
         [HttpPost]

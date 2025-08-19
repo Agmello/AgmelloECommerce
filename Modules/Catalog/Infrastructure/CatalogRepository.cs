@@ -20,15 +20,15 @@ namespace Modules.Catalog.Infrastructure
             await m_dbContext.SaveChangesAsync(token);
         }
 
-        public async Task DeleteItemAsync(Guid id, CancellationToken token = default)
+        public async Task<bool> DeleteItemAsync(Guid id, CancellationToken token = default)
         {
-            var item = m_dbContext.CatalogItems.FirstOrDefault(x => x.Id == id) ?? throw new ArgumentException("Item not found", nameof(id));
-            await DeleteItemAsync(item, token);
+            var item = m_dbContext.CatalogItems.FirstOrDefault(x => x.Id == id);
+            return item is not null ? await DeleteItemAsync(item, token) : false;
         }
-        public async Task DeleteItemAsync(CatalogItem item, CancellationToken token = default)
+        public async Task<bool> DeleteItemAsync(CatalogItem item, CancellationToken token = default)
         {
             m_dbContext.Remove(item);
-            await m_dbContext.SaveChangesAsync(token);
+            return await m_dbContext.SaveChangesAsync(token) > 0;
         }
 
         public async Task<List<CatalogItem>> GetAllAsync(CancellationToken token = default)
