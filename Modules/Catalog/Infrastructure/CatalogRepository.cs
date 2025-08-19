@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Modules.Catalog.Application;
+using Modules.Catalog.Application.Queries;
 using Modules.Catalog.Domain;
 
 namespace Modules.Catalog.Infrastructure
@@ -39,6 +41,28 @@ namespace Modules.Catalog.Infrastructure
             return await m_dbContext.CatalogItems
                 .FirstOrDefaultAsync(x => x.Id == id, token)
                 ?? throw new ArgumentException("Item not found", nameof(id));
+        }
+
+        public Task<List<CatalogItem>> GetFilteredAsync(CatalogFilterDto filter, CancellationToken token = default)
+        {
+            IQueryable<CatalogItem> query = m_dbContext.CatalogItems;
+            if (filter == null)
+                throw new ArgumentNullException(nameof(filter), "Filter cannot be null");
+            if (!string.IsNullOrWhiteSpace(filter.Name))
+                query = query.Where(x => x.Name.ToLower().Contains(filter.Name.ToLower()));
+            if (filter.MinPrice.HasValue)
+                query = query.Where(x => x.Price >= filter.MinPrice.Value);
+            if (filter.MaxPrice.HasValue)
+                query = query.Where(x => x.Price <= filter.MaxPrice.Value);
+            if (!string.IsNullOrWhiteSpace(filter.Availability))
+                query = query.Where(x => x.Availability.ToLower().Equals(filter.Availability.ToLower()));
+            if (filter.CategoryIds != null && filter.CategoryIds.Any())
+                query = query.Where(x => x.Categories.Any(c => filter.CategoryIds.Contains(c.Id)));
+            if (filter.TagIds != null && filter.TagIds.Any())
+                query = query.Where(x => x.Tags.Any(t => filter.TagIds.Contains(t.Id)));
+
+            return query.ToListAsync(token);
+
         }
 
         public async Task<int> PurgeAsync(CancellationToken token = default)
