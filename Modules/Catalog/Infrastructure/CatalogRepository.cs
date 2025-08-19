@@ -1,10 +1,5 @@
-﻿using Modules.Catalog.Domain;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore;
+using Modules.Catalog.Domain;
 
 namespace Modules.Catalog.Infrastructure
 {
@@ -44,6 +39,13 @@ namespace Modules.Catalog.Infrastructure
             return await m_dbContext.CatalogItems
                 .FirstOrDefaultAsync(x => x.Id == id, token)
                 ?? throw new ArgumentException("Item not found", nameof(id));
+        }
+
+        public async Task<int> PurgeAsync(CancellationToken token = default)
+        {
+            var items = await m_dbContext.CatalogItems.ToListAsync(token);
+            m_dbContext.CatalogItems.RemoveRange(items);
+            return await m_dbContext.SaveChangesAsync(token);
         }
 
         public async Task UpdateFieldAsync(Guid id, string field, object value, CancellationToken token = default)

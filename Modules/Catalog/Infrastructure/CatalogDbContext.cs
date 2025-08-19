@@ -1,11 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Modules.Catalog.Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Modules.Catalog.Domain.CatalogItem;
+using Modules.Catalog.Domain.ManyToMany;
 
 namespace Modules.Catalog.Infrastructure
 {
@@ -35,6 +30,16 @@ namespace Modules.Catalog.Infrastructure
                 .HasMany(i => i.Tags)
                 .WithMany(t => t.Items)
                 .UsingEntity(j => j.ToTable("ItemTags"));
+
+            modelBuilder.Entity<CatalogItem>()
+                .Property(e => e.Id)
+                .HasDefaultValueSql("NEWSEQUENTIALID()");
+            modelBuilder.Entity<Category>()
+                .Property(e => e.Id)
+                .HasDefaultValueSql("NEWSEQUENTIALID()");
+            modelBuilder.Entity<Tag>()
+                .Property(e => e.Id)
+                .HasDefaultValueSql("NEWSEQUENTIALID()");
         }
     }
 }

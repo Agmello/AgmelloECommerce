@@ -1,10 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Modules.Catalog.Application.Commands;
+using Modules.Catalog.Application.Queries;
 
 namespace Modules.Catalog.API
 {
@@ -20,7 +17,7 @@ namespace Modules.Catalog.API
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetCatalogItemAsync(Guid id, CancellationToken token = default)
+        public async Task<IActionResult> GetCatalogItem(Guid id, CancellationToken token = default)
         {
             if (id == Guid.Empty)
                 return BadRequest("Invalid ID");
@@ -38,6 +35,21 @@ namespace Modules.Catalog.API
             return Ok(item);
         }
 
+        [HttpDelete("purge")]
+        public async Task<IActionResult> PurgeAsync(CancellationToken token = default)
+        {
+            var count = await m_mediator.Send(new PurgeCatalogItemTableCommand(), token);
+            return Ok(new { deleted = count });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddCatalogItemAsync(string name, decimal price, string description, string availability, string imageUrl, CancellationToken token = default)
+        {
+            var command = new CreateCatalogItemCommand(name, description, availability, price, imageUrl);
+            var id = await m_mediator.Send( command, token);
+            return CreatedAtAction(nameof(GetCatalogItem), new { id }, command.Item);
+
+        }
 
     }
 }

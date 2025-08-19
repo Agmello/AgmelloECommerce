@@ -14,5 +14,6 @@ namespace Modules.Catalog.Domain
         Task UpdateItemAsync(CatalogItem item, CancellationToken token = default);
         Task UpdateFieldAsync(Guid id, string field, object value, CancellationToken token = default);
         Task DeleteItemAsync(Guid id, CancellationToken token = default);
+        Task<int> PurgeAsync(CancellationToken token = default);
     }
 }
