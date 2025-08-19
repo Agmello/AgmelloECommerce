@@ -36,7 +36,9 @@ BEGIN TRY
         BEGIN        
             CREATE TABLE dbo.Catalog
             (
-                Id           INT IDENTITY(1,1) PRIMARY KEY,
+                Id           uniqueidentifier NOT NULL 
+                             CONSTRAINT PK_Catalog PRIMARY KEY 
+                             DEFAULT NEWSEQUENTIALID(),
                 Name         NVARCHAR(200)  NOT NULL,
                 Description  NVARCHAR(MAX)  NULL,
                 Availability NVARCHAR(50)   NULL,
@@ -47,7 +49,9 @@ BEGIN TRY
             -- Add many-to-many relationships
             CREATE TABLE dbo.Category
             (
-                Id           INT IDENTITY(1,1) CONSTRAINT PK_Category PRIMARY KEY,
+                Id           uniqueidentifier NOT NULL 
+                             CONSTRAINT PK_Category PRIMARY KEY
+                             DEFAULT NEWSEQUENTIALID(),
                 Name         NVARCHAR(100) NOT NULL,
                 CreatedAtUtc DATETIME2(0)  NOT NULL CONSTRAINT DF_Category_CreatedAtUtc DEFAULT SYSUTCDATETIME()
             );
@@ -56,7 +60,9 @@ BEGIN TRY
 
             CREATE TABLE dbo.Tag
             (
-                Id           INT IDENTITY(1,1) CONSTRAINT PK_Tag PRIMARY KEY,
+                Id           uniqueidentifier NOT NULL 
+                             CONSTRAINT PK_Tag PRIMARY KEY
+                             DEFAULT NEWSEQUENTIALID(),
                 Name         NVARCHAR(100) NOT NULL,
                 CreatedAtUtc DATETIME2(0)  NOT NULL CONSTRAINT DF_Tag_CreatedAtUtc DEFAULT SYSUTCDATETIME()
             );
@@ -64,8 +70,8 @@ BEGIN TRY
 
             CREATE TABLE dbo.CatalogCategories
             (
-                CatalogId  INT NOT NULL,
-                CategoryId INT NOT NULL,
+                CatalogId  uniqueidentifier NOT NULL,
+                CategoryId uniqueidentifier NOT NULL,
                 CONSTRAINT PK_CatalogCategories PRIMARY KEY (CatalogId, CategoryId),
                 CONSTRAINT FK_CatalogCategories_Catalog
                     FOREIGN KEY (CatalogId)  REFERENCES dbo.Catalog(Id)  ON DELETE CASCADE,
@@ -77,8 +83,8 @@ BEGIN TRY
 
             CREATE TABLE dbo.CatalogTags
             (
-                CatalogId INT NOT NULL,
-                TagId     INT NOT NULL,
+                CatalogId uniqueidentifier NOT NULL,
+                TagId     uniqueidentifier NOT NULL,
                 CONSTRAINT PK_CatalogTags PRIMARY KEY (CatalogId, TagId),
                 CONSTRAINT FK_CatalogTags_Catalog
                     FOREIGN KEY (CatalogId) REFERENCES dbo.Catalog(Id) ON DELETE CASCADE,

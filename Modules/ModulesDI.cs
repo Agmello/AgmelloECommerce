@@ -2,8 +2,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore.SqlServer;
 using Microsoft.EntityFrameworkCore;
-using Modules.Catalog.Application;
 using Modules.Catalog.Domain;
+using Modules.Catalog.Application.Commands;
 
 namespace Modules
 {
@@ -27,6 +27,7 @@ namespace Modules
             {
                 // Register Catalog module services
                 services.AddScoped<ICatalogRepository, Modules.Catalog.Infrastructure.CatalogRepository>();
+                services.AddSingleton<ICatalog, Catalog.Domain.Catalog>();
                 // Add other Catalog services as needed
                 services.AddDbContext<Modules.Catalog.Infrastructure.CatalogDbContext>(options => {
                     options.UseSqlServer(configuration.GetConnectionString("AgmelloECommerceDb"));
@@ -34,7 +35,7 @@ namespace Modules
                 });
                 services.AddMediatR(cfg =>
                 {
-                    cfg.RegisterServicesFromAssembly(typeof(CreateCatalogItemHandler).Assembly);
+                    cfg.RegisterServicesFromAssembly(typeof(CreateCatalogItemCommandHandler).Assembly);
                 });
             });
         }
