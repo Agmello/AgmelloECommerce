@@ -21,21 +21,20 @@ namespace Modules.Users.API
             m_mediator = mediator;
         }
 
-
-        [HttpGet("{email}")]
+        [HttpGet("email")]
         public async Task<IActionResult> GetByEmail(string email, CancellationToken token)
         {
             if(string.IsNullOrEmpty(email)) return BadRequest("Invalid email");
-            var user = await m_mediator.Send(new GetUserByEmailQuery(email));
+            var user = await m_mediator.Send(new GetUserByEmailQuery(email), token);
             if (user == null)
                 return NotFound();
             return Ok(user);
         }
-        [HttpGet("{id}")]
+        [HttpGet("id")]
         public async Task<IActionResult> GetById(Guid id, CancellationToken token)
         {
             if (Guid.Empty == id) return BadRequest("Invalid ID");
-            var user = await m_mediator.Send(new GetUserByIdQuery(id));
+            var user = await m_mediator.Send(new GetUserByIdQuery(id), token);
             if (user == null)
                 return NotFound();
             return Ok(user);
@@ -46,9 +45,18 @@ namespace Modules.Users.API
         {
             if (command == null) throw new ArgumentNullException(nameof(command));
             var id = await m_mediator.Send(command, token);
-            if (id == null)
+            if (id == Guid.Empty)
                 return BadRequest("User registration failed");
             return CreatedAtAction(nameof(GetByEmail), new { id }, id);
+        }
+        [HttpDelete]
+        public async Task<IActionResult> DeleteUserAsync(Guid id, CancellationToken token)
+        {
+            if (Guid.Empty == id) return BadRequest("Invalid ID");
+            var result = await m_mediator.Send(new DeleteUserCommand(id), token);
+            if (!result)
+                return NotFound();
+            return NoContent();
         }
     }
 }

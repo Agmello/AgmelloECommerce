@@ -19,9 +19,11 @@ namespace Modules.Users.Infrastructure
             m_dbContext = db;
         }
 
-        public Task<bool> DeleteUserAsync(User user, CancellationToken token)
+        public async Task<bool> DeleteUserAsync(Guid id, CancellationToken token)
         {
-            throw new NotImplementedException();
+            if (id == Guid.Empty) throw new ArgumentException("Invalid user ID", nameof(id));
+            m_dbContext.Users.Remove(new User { Id = id });
+            return await m_dbContext.SaveChangesAsync(token) > 0;
         }
         public async Task<UserGetDto?> GetUserByIdAsync(Guid id, CancellationToken token)
         {

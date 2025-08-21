@@ -14,6 +14,6 @@ namespace Modules.Users.Domain
         Task<UserGetDto?> GetUserByUsernameAsync(string username, CancellationToken token);
         Task<bool> UpdateUserLevelAsync(User user, string level);
         Task<Guid> RegisterUserAsync(AddUserDto user, CancellationToken token);
-        Task<bool> DeleteUserAsync(User user, CancellationToken token);
+        Task<bool> DeleteUserAsync(Guid id, CancellationToken token);
     }
 }
