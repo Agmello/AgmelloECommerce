@@ -6,7 +6,6 @@ namespace Modules.Catalog.Infrastructure
 {
     public class CatalogDbContext : DbContext
     {
-        private string m_connectionstring;
         public DbSet<Domain.CatalogItem> CatalogItems => Set<Domain.CatalogItem>();
 
         public CatalogDbContext(DbContextOptions<CatalogDbContext> options)
