@@ -1,6 +1,7 @@
-using Modules;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using Modules;
 using System.Text;
 namespace AgmelloECommerce
 {
@@ -15,9 +16,34 @@ namespace AgmelloECommerce
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(c => {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+
+                var jwtSecurityScheme = new OpenApiSecurityScheme
+                {
+                    Scheme = "bearer",
+                    BearerFormat = "JWT",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Description = "Enter: Bearer {your JWT token}",
+
+                    Reference = new OpenApiReference
+                    {
+                        Id = JwtBearerDefaults.AuthenticationScheme,
+                        Type = ReferenceType.SecurityScheme
+                    }
+                };
+
+                c.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        { jwtSecurityScheme, Array.Empty<string>() }
+    });
+            });
 
             builder.Services.AddControllers();
+
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -34,6 +60,9 @@ namespace AgmelloECommerce
                             Encoding.UTF8.GetBytes(config["Jwt:Key"]!))
                     };
                 });
+
+            builder.Services.AddAuthorization();
+
             ModulesDI.RegisterServices(builder.Services, builder.Configuration);
             
             var app = builder.Build();
@@ -43,6 +72,9 @@ namespace AgmelloECommerce
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
+
+
+
             }
 
             app.UseHttpsRedirection();

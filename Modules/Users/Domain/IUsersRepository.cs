@@ -15,5 +15,6 @@ namespace Modules.Users.Domain
         Task<bool> UpdateUserLevelAsync(User user, string level);
         Task<Guid> RegisterUserAsync(AddUserDto user, CancellationToken token);
         Task<bool> DeleteUserAsync(Guid id, CancellationToken token);
+        Task<User> GetUserForLoginAsync(string email, CancellationToken token);
     }
 }

@@ -1,11 +1,14 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Modules.Users.Application.Commands;
 using Modules.Users.Application.Queries;
 using Modules.Users.Domain;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -49,6 +52,7 @@ namespace Modules.Users.API
                 return BadRequest("User registration failed");
             return CreatedAtAction(nameof(GetByEmail), new { id }, id);
         }
+        [Authorize(Roles = "Admin")]
         [HttpDelete]
         public async Task<IActionResult> DeleteUserAsync(Guid id, CancellationToken token)
         {
@@ -58,5 +62,23 @@ namespace Modules.Users.API
                 return NotFound();
             return NoContent();
         }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromQuery] LoginCommand command)
+        {
+            if (command == null) throw new ArgumentNullException(nameof(command));
+            var token = await m_mediator.Send(command);
+            return Ok(new { token });
+        }
+
+        [Authorize]
+        [HttpGet("me")]
+        public IActionResult GetMe()
+        {
+            //var userId = User.FindFirstValue(JwtRegisteredClaimNames.Email);
+            var userId = User.FindFirstValue(ClaimTypes.Role);
+            return Ok(new { userId });
+        }
+
     }
 }
