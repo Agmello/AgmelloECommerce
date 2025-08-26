@@ -32,9 +32,12 @@ namespace Modules.Users.Infrastructure
 
         public async Task<UserGetDto?> GetUserByEmailAsync(string email, CancellationToken token)
         {
-            return (await m_dbContext.Users.FirstOrDefaultAsync(x => x.Email == email))?.ToDto();
+            return (await GetUserAsync(email)).ToDto();
         }
-
+        private async Task<User> GetUserAsync(string email)
+        {
+            return await m_dbContext.Users.FirstOrDefaultAsync(x => x.Email == email) ?? throw new ArgumentException("Invalid email");
+        }
         public Task<UserGetDto?> GetUserByUsernameAsync(string username, CancellationToken token)
         {
             throw new NotImplementedException();
@@ -52,6 +55,11 @@ namespace Modules.Users.Infrastructure
         public Task<bool> UpdateUserLevelAsync(User user, string level)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<User> GetUserForLoginAsync(string email, CancellationToken token)
+        {
+            return await GetUserAsync(email);
         }
     }
 }
