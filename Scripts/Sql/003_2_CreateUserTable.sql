@@ -40,7 +40,7 @@ BEGIN TRY
                 Id           uniqueidentifier NOT NULL 
                              CONSTRAINT PK_Users PRIMARY KEY 
                              DEFAULT NEWSEQUENTIALID(),
-                USername         NVARCHAR(200)  NOT NULL,
+                Username         NVARCHAR(200)  NOT NULL,
                 Email        NVARCHAR(200)  NOT NULL UNIQUE,
                 Password NVARCHAR(200)  NOT NULL,
                 Accessibility NVARCHAR(50) NULL DEFAULT 'customer',

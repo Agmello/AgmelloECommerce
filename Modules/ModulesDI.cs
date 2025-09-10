@@ -4,9 +4,17 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Modules.Catalog.Application.Commands;
 using Modules.Catalog.Domain;
+using Modules.Catalog.Infrastructure;
+using Modules.Orders.Domain;
+using Modules.Orders.Infrastructure;
 using Modules.Users.Application.JWT;
 using Modules.Users.Domain;
 using Modules.Users.Infrastructure;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Authorization;
+using Modules.Orders.Application.Authorization;
 
 namespace Modules
 {
@@ -20,41 +28,41 @@ namespace Modules
             // services.AddScoped<ICatalogService, CatalogService>();
             // services.AddDbContext<CatalogDbContext>(options => options.UseSqlServer("YourConnectionString
             
-            void Register(string name, Action action)
+            void Register<TDbContext, TIRepository, TRepository>(string name, Action? action = null) 
+                where TDbContext : DbContext where TIRepository : class where TRepository : class, TIRepository
             {
-                if (skip != null && skip.Any(x => x.ToLower() == "catalog")) return;
+                if (skip != null && skip.Any(x => x.ToLower() == name)) return;
+
+                // Register Order module services
+                services.AddScoped<TIRepository, TRepository>();
+                // Add other Order services as needed
+                services.AddDbContext<TDbContext>(options => {
+                    options.UseSqlServer(configuration.GetConnectionString("AgmelloECommerceDb"));
+                });
+
                 action?.Invoke();
             }
 
-            Register("Catalog", () =>
+            Register<CatalogDbContext,ICatalogRepository, CatalogRepository>("Catalog", () =>
             {
-                // Register Catalog module services
-                services.AddScoped<ICatalogRepository, Modules.Catalog.Infrastructure.CatalogRepository>();
                 services.AddSingleton<ICatalog, Catalog.Domain.Catalog>();
-                // Add other Catalog services as needed
-                services.AddDbContext<Modules.Catalog.Infrastructure.CatalogDbContext>(options => {
-                    options.UseSqlServer(configuration.GetConnectionString("AgmelloECommerceDb"));
-
-                });
                 services.AddMediatR(cfg =>
                 {
                     cfg.RegisterServicesFromAssembly(typeof(CreateCatalogItemCommandHandler).Assembly);
                 });
             });
-            Register("user", () =>
+            Register<UsersDbContext, IUsersRepository, UsersRepository>("user", () =>
             {
-                // Register Catalog module services
-                services.AddScoped<IUsersRepository, UsersRepository>();
-                // Add other Catalog services as needed
-                services.AddDbContext<Modules.Users.Infrastructure.UsersDbContext>(options => {
-                    options.UseSqlServer(configuration.GetConnectionString("AgmelloECommerceDb"));
-
-                });
                 services.AddScoped<IUserJwt, UserJwt>();
-                /*services.AddMediatR(cfg =>
-                {
-                    cfg.RegisterServicesFromAssembly(typeof(CreateCatalogItemCommandHandler).Assembly);
-                });*/
+            });
+            Register<OrdersDbContext, IOrdersRepository, OrdersRepository>("order");
+        }
+
+        public static void AddAuthorizations(AuthorizationOptions options)
+        {
+            options.AddPolicy("CanManageOrder", policy =>
+            {
+                policy.Requirements.Add(new CanManageOrderRequirment());
             });
         }
     }

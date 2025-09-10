@@ -61,8 +61,14 @@ namespace AgmelloECommerce
                     };
                 });
 
-            builder.Services.AddAuthorization();
-
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Adminstrators", policy =>
+                      policy.RequireRole("Admin", "SuperAdmin", "BackupAdmin"));
+                options.AddPolicy("Handlers", policy =>
+                       policy.RequireRole("Handler", "Admin", "SuperAdmin", "BackupAdmin"));
+                ModulesDI.AddAuthorizations(options);
+            });
             ModulesDI.RegisterServices(builder.Services, builder.Configuration);
             
             var app = builder.Build();

@@ -63,6 +63,8 @@ namespace Modules.Users.API
             return NoContent();
         }
 
+
+        // Password: abc123
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromQuery] LoginCommand command)
         {

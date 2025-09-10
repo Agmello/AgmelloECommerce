@@ -27,14 +27,10 @@
     <Folder Include="Inventory\Application\" />
     <Folder Include="Inventory\Domain\" />
     <Folder Include="Inventory\Infrastructure\" />
-    <Folder Include="Orders\API\" />
-    <Folder Include="Orders\Application\" />
-    <Folder Include="Orders\Infrastructure\" />
     <Folder Include="Payments\API\" />
     <Folder Include="Payments\Application\" />
     <Folder Include="Payments\Domain\" />
     <Folder Include="Payments\Infrastructure\" />
-    <Folder Include="Orders\Domain\" />
     <Folder Include="Reviews\API\" />
     <Folder Include="Reviews\Application\" />
     <Folder Include="Reviews\Domain\" />
@@ -48,6 +44,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.8" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.8" />
+    <PackageReference Include="Microsoft.OpenApi" Version="1.6.14" />
   </ItemGroup>
 
   <ItemGroup>
